@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PkViz2 — Packet Visualizer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="toolbar toolbar-top">
+    <div class="brand">
+      <h1>PkViz<span class="brand-accent">2</span></h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="toolbar-section">
+      <span class="section-label">Capture</span>
+      <label>Window <input type="number" id="input-window-size" value="100" min="1" max="100000"></label>
+      <label>Speed <input type="number" id="input-speed" value="10" min="0.1" max="10000" step="1"></label>
+      <label>Max Bytes <input type="number" id="input-max-packet-size" value="1500" min="1" max="65535"></label>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="toolbar-section">
+      <span class="section-label">Axes</span>
+      <label>X Scale <select id="input-x-mode">
+        <option value="linear">Linear</option>
+        <option value="logarithmic">Log</option>
+      </select></label>
+      <label class="checkbox-label"><input type="checkbox" id="input-y-invert"> Invert Y</label>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="toolbar-section">
+      <span class="section-label">Palette</span>
+      <label>BG <input type="color" id="input-bg-color" value="#000000"></label>
+      <label>Cold <input type="color" id="input-cold-color" value="#0000ff"></label>
+      <label>Hot <input type="color" id="input-hot-color" value="#ffff00"></label>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="toolbar-section">
+      <span class="section-label">Fade</span>
+      <label>Min <input type="number" id="input-brightness-min" value="0.1" min="0" max="1" step="0.05"></label>
+      <label>Max <input type="number" id="input-brightness-max" value="1.0" min="0" max="1" step="0.05"></label>
+    </div>
+  </div>
+
+  <div class="canvas-container">
+    <canvas id="packet-canvas"></canvas>
+    <canvas id="glow-canvas"></canvas>
+  </div>
+
+  <div id="hexdump-panel" class="hexdump-panel hidden">
+    <pre id="hexdump-content"></pre>
+  </div>
+
+  <div class="toolbar toolbar-bottom">
+    <div class="toolbar-section transport">
+      <input type="file" id="file-input" accept=".pcap,.pcapng,.cap">
+      <button id="btn-load" class="btn-accent" title="Load .pcap file">Load</button>
+      <button id="btn-load-sample" title="Load sample.pcap">Load Sample</button>
+      <button id="btn-reset" title="Reset to start">Reset</button>
+      <button id="btn-step-back" title="Step back one packet">&laquo; Step</button>
+      <button id="btn-play" class="btn-primary" title="Play animation">Play</button>
+      <button id="btn-pause" title="Pause animation">Pause</button>
+      <button id="btn-step-fwd" title="Step forward one packet">Step &raquo;</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="toolbar-section nav">
+      <label>Go to<input type="number" id="input-goto-packet" min="1" placeholder="#"></label>
+      <button id="btn-goto">Go</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="toolbar-section">
+      <button id="btn-hexdump" title="Show hex dump of current packet">Hex Dump</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="toolbar-section readout">
+      <div class="readout-item">
+        <span class="readout-label">PKT</span>
+        <span class="readout-value" id="status-packet-num">--</span>
+      </div>
+      <div class="readout-item">
+        <span class="readout-label">WINDOW</span>
+        <span class="readout-value" id="status-packet-range">--</span>
+      </div>
+      <div class="readout-item">
+        <span class="readout-label">TOTAL</span>
+        <span class="readout-value" id="status-total">--</span>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
