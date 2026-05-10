@@ -96,6 +96,18 @@ export function initControls() {
     if (e.target === helpModal) helpModal.classList.add('hidden');
   });
 
+  const scrubber = document.getElementById('input-scrubber');
+  scrubber.addEventListener('input', (e) => {
+    stopAnimation();
+    setState({ currentIndex: parseInt(e.target.value) });
+    render();
+  });
+  subscribe('currentIndex', (val) => { scrubber.value = val; });
+  subscribe('totalPackets', (val) => {
+    scrubber.max = Math.max(0, val - 1);
+    scrubber.disabled = val === 0;
+  });
+
   bindSetting('input-window-size', 'windowSize', parseInt);
   bindSetting('input-speed', 'speed', parseFloat);
   bindSetting('input-max-packet-size', 'maxPacketSize', parseInt);

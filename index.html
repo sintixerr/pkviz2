@@ -63,6 +63,10 @@
     <pre id="hexdump-content"></pre>
   </div>
 
+  <div class="scrubber-bar">
+    <input type="range" id="input-scrubber" min="0" max="0" value="0" disabled>
+  </div>
+
   <div class="toolbar toolbar-bottom">
     <button id="btn-help" class="btn-help" title="How to use PkViz2">Help</button>
     <div class="toolbar-section transport">
@@ -115,7 +119,7 @@
       <h3>What It Does</h3>
       <p>PkViz2 visualizes network packet data as a scatterplot. Each byte in a packet becomes a dot:</p>
       <ul>
-        <li><strong>X axis</strong> = byte's position within the packet (0 to 1500)</li>
+        <li><strong>X axis</strong> = byte's position within the packet (0 to Max Bytes, default 1500)</li>
         <li><strong>Y axis</strong> = byte's value (0 at bottom, 255 at top)</li>
       </ul>
 
