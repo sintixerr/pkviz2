@@ -5,7 +5,7 @@
 }
 
 :root {
-  font-size: clamp(16px, 1.6vw, 22px);
+  font-size: clamp(13px, 1.1vw, 16px);
   --bg-deep: #0b0e17;
   --bg-panel: #121829;
   --bg-input: #0d1220;
