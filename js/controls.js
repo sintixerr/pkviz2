@@ -86,6 +86,9 @@ export function initControls() {
     e.preventDefault();
     helpModal.classList.toggle('hidden');
   });
+  document.getElementById('btn-help').addEventListener('click', () => {
+    helpModal.classList.toggle('hidden');
+  });
   document.getElementById('help-close').addEventListener('click', () => {
     helpModal.classList.add('hidden');
   });

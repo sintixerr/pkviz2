@@ -57,6 +57,27 @@ body {
   box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.4);
   z-index: 10;
   justify-content: center;
+  position: relative;
+}
+
+.btn-help {
+  position: absolute;
+  left: 1rem;
+  padding: 0.55rem 1.1rem;
+  background: var(--btn-bg);
+  color: var(--text-bright);
+  border: 1px solid var(--btn-border);
+  border-radius: 0.35rem;
+  cursor: pointer;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.btn-help:hover {
+  background: var(--btn-hover);
+  border-color: var(--accent);
+  color: #fff;
 }
 
 .toolbar-section {
