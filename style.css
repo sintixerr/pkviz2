@@ -319,6 +319,125 @@ body {
   white-space: pre;
 }
 
+/* Help link */
+
+.help-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 50%;
+  background: var(--border);
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+}
+
+.help-link:hover {
+  background: var(--accent);
+  color: var(--bg-deep);
+}
+
+/* Help modal */
+
+.help-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.help-modal.hidden {
+  display: none;
+}
+
+.help-content {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 2rem;
+  max-width: 50rem;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.help-content h2 {
+  font-size: 1.3rem;
+  color: var(--text-bright);
+  margin-bottom: 1rem;
+}
+
+.help-content h3 {
+  font-size: 1rem;
+  color: var(--accent);
+  margin-top: 1.2rem;
+  margin-bottom: 0.4rem;
+}
+
+.help-content h4 {
+  font-size: 0.9rem;
+  color: var(--text);
+  margin-top: 0.8rem;
+  margin-bottom: 0.3rem;
+}
+
+.help-content p, .help-content ul, .help-content table {
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+
+.help-content ul {
+  padding-left: 1.2rem;
+}
+
+.help-content li {
+  margin-bottom: 0.3rem;
+}
+
+.help-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 0.8rem;
+}
+
+.help-content td {
+  padding: 0.3rem 0.6rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.help-content td:first-child {
+  white-space: nowrap;
+  width: 8rem;
+}
+
+.help-close {
+  position: absolute;
+  top: 0.8rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.help-close:hover {
+  color: var(--text-bright);
+}
+
 /* Hidden elements */
 
 #file-input {

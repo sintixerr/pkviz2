@@ -81,6 +81,18 @@ export function initControls() {
     if (!hexPanel.classList.contains('hidden')) updateHexDump();
   });
 
+  const helpModal = document.getElementById('help-modal');
+  document.getElementById('help-link').addEventListener('click', (e) => {
+    e.preventDefault();
+    helpModal.classList.toggle('hidden');
+  });
+  document.getElementById('help-close').addEventListener('click', () => {
+    helpModal.classList.add('hidden');
+  });
+  helpModal.addEventListener('click', (e) => {
+    if (e.target === helpModal) helpModal.classList.add('hidden');
+  });
+
   bindSetting('input-window-size', 'windowSize', parseInt);
   bindSetting('input-speed', 'speed', parseFloat);
   bindSetting('input-max-packet-size', 'maxPacketSize', parseInt);

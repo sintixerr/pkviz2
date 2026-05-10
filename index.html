@@ -13,6 +13,7 @@
   <div class="toolbar toolbar-top">
     <div class="brand">
       <h1>PkViz<span class="brand-accent">2</span></h1>
+      <a href="#" id="help-link" class="help-link" title="How to use PkViz2">?</a>
     </div>
 
     <div class="divider"></div>
@@ -102,6 +103,67 @@
         <span class="readout-label">TOTAL</span>
         <span class="readout-value" id="status-total">--</span>
       </div>
+    </div>
+  </div>
+
+  <div id="help-modal" class="help-modal hidden">
+    <div class="help-content">
+      <button id="help-close" class="help-close">&times;</button>
+      <h2>PkViz2 — Quick Start Guide</h2>
+
+      <h3>What It Does</h3>
+      <p>PkViz2 visualizes network packet data as a scatterplot. Each byte in a packet becomes a dot:</p>
+      <ul>
+        <li><strong>X axis</strong> = byte's position within the packet (0 to 1500)</li>
+        <li><strong>Y axis</strong> = byte's value (0 at bottom, 255 at top)</li>
+      </ul>
+
+      <h3>How the Visualization Works</h3>
+      <h4>Packet Window</h4>
+      <p>The display shows multiple packets simultaneously. The <strong>Window</strong> setting controls how many (default: 100). As animation plays, packets slide through: newest enters, oldest drops out.</p>
+
+      <h4>Color = Density</h4>
+      <p>When multiple packets share the same position AND value, that pixel shifts from <strong>cold</strong> (blue) toward <strong>hot</strong> (yellow). More overlap = warmer color.</p>
+
+      <h4>Brightness = Recency</h4>
+      <p>Each packet gets brightness based on age within the window. Newest = full bright, oldest = nearly invisible.</p>
+
+      <h3>Transport Controls (Bottom Bar)</h3>
+      <table>
+        <tr><td><strong>Load</strong></td><td>Open a .pcap/.pcapng file</td></tr>
+        <tr><td><strong>Load Sample</strong></td><td>Load the included sample.pcap</td></tr>
+        <tr><td><strong>Reset</strong></td><td>Jump to first packet</td></tr>
+        <tr><td><strong>&laquo; Step / Step &raquo;</strong></td><td>Step one packet back/forward</td></tr>
+        <tr><td><strong>Play / Pause</strong></td><td>Start/stop animation</td></tr>
+        <tr><td><strong>Go to #</strong></td><td>Jump to a specific packet number</td></tr>
+        <tr><td><strong>Hex Dump</strong></td><td>Toggle raw hex view of current packet</td></tr>
+      </table>
+
+      <h3>Settings (Top Bar)</h3>
+      <table>
+        <tr><td><strong>Window</strong></td><td>Packets displayed at once (default: 100)</td></tr>
+        <tr><td><strong>Speed</strong></td><td>Packets per second (default: 10)</td></tr>
+        <tr><td><strong>Max Bytes</strong></td><td>X axis maximum (default: 1500)</td></tr>
+        <tr><td><strong>X Scale</strong></td><td>Linear or Logarithmic (spreads early bytes)</td></tr>
+        <tr><td><strong>Invert Y</strong></td><td>Flip Y axis (0 at top)</td></tr>
+        <tr><td><strong>BG / Cold / Hot</strong></td><td>Background, low-density, and high-density colors</td></tr>
+        <tr><td><strong>Fade Min / Max</strong></td><td>Brightness range for oldest/newest packets</td></tr>
+      </table>
+
+      <h3>Keyboard Shortcuts</h3>
+      <table>
+        <tr><td><strong>Space</strong></td><td>Play / Pause</td></tr>
+        <tr><td><strong>Left Arrow</strong></td><td>Step back</td></tr>
+        <tr><td><strong>Right Arrow</strong></td><td>Step forward</td></tr>
+      </table>
+
+      <h3>Tips</h3>
+      <ul>
+        <li>Small window (5-10) to see individual packet structure and fade</li>
+        <li>Large window (500+) to see aggregate patterns and density</li>
+        <li>Logarithmic X is great for protocol header patterns</li>
+        <li>DNS traffic (port 53) makes great demo data</li>
+      </ul>
     </div>
   </div>
 
