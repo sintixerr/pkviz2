@@ -7,7 +7,7 @@ export function initControls() {
   const fileInput = document.getElementById('file-input');
   const loadBtn = document.getElementById('btn-load');
   const playBtn = document.getElementById('btn-play');
-  const pauseBtn = document.getElementById('btn-pause');
+  const stopBtn = document.getElementById('btn-stop');
   const stepFwdBtn = document.getElementById('btn-step-fwd');
   const stepBackBtn = document.getElementById('btn-step-back');
 
@@ -41,7 +41,7 @@ export function initControls() {
     startAnimation();
   });
 
-  pauseBtn.addEventListener('click', stopAnimation);
+  stopBtn.addEventListener('click', stopAnimation);
   stepFwdBtn.addEventListener('click', () => { stopAnimation(); stepForward(); });
   stepBackBtn.addEventListener('click', () => { stopAnimation(); stepBack(); });
 
@@ -114,15 +114,13 @@ export function initControls() {
   bindSetting('input-brightness-min', 'brightnessMin', parseFloat);
   bindSetting('input-brightness-max', 'brightnessMax', parseFloat);
 
-  bindColorSetting('input-bg-color', 'backgroundColor');
   bindColorSetting('input-cold-color', 'coldColor');
   bindColorSetting('input-hot-color', 'hotColor');
 
-  document.getElementById('input-y-invert').addEventListener('change', (e) => {
-    setState({ yInverted: e.target.checked });
+  document.getElementById('input-fill-width').addEventListener('change', (e) => {
+    setState({ fillWidth: e.target.checked });
     render();
   });
-
 
   document.getElementById('input-x-mode').addEventListener('change', (e) => {
     setState({ xAxisMode: e.target.value });

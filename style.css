@@ -61,8 +61,6 @@ body {
 }
 
 .btn-help {
-  position: absolute;
-  left: 1rem;
   padding: 0.55rem 1.1rem;
   background: var(--btn-bg);
   color: var(--text-bright);
@@ -225,30 +223,30 @@ body {
   transform: scale(0.96);
 }
 
-/* Primary action (Play) */
+/* Play button (green) */
 
-.btn-primary {
-  background: var(--primary) !important;
-  border-color: var(--primary) !important;
-  color: #fff !important;
-}
-
-.btn-primary:hover {
-  background: var(--primary-hover) !important;
-  border-color: var(--primary-hover) !important;
-}
-
-/* Accent action (Load) */
-
-.btn-accent {
-  background: var(--accent-dim) !important;
-  border-color: var(--accent) !important;
+.btn-play {
+  background: #1a6b3a !important;
+  border-color: #2ecc71 !important;
   color: var(--text-bright) !important;
 }
 
-.btn-accent:hover {
-  background: var(--accent) !important;
+.btn-play:hover {
+  background: #2ecc71 !important;
   color: var(--bg-deep) !important;
+}
+
+/* Stop button (red) */
+
+.btn-stop {
+  background: #6b1a1a !important;
+  border-color: #e74c3c !important;
+  color: var(--text-bright) !important;
+}
+
+.btn-stop:hover {
+  background: #e74c3c !important;
+  color: #fff !important;
 }
 
 /* No button group — all buttons same shape */

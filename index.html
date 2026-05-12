@@ -33,14 +33,13 @@
         <option value="linear">Linear</option>
         <option value="logarithmic">Log</option>
       </select></label>
-      <label class="checkbox-label"><input type="checkbox" id="input-y-invert"> Invert Y</label>
+      <label class="checkbox-label"><input type="checkbox" id="input-fill-width"> Fill Width</label>
     </div>
 
     <div class="divider"></div>
 
     <div class="toolbar-section">
       <span class="section-label">Palette</span>
-      <label>BG <input type="color" id="input-bg-color" value="#000000"></label>
       <label>Cold <input type="color" id="input-cold-color" value="#0000ff"></label>
       <label>Hot <input type="color" id="input-hot-color" value="#ffff00"></label>
     </div>
@@ -70,14 +69,27 @@
 
   <div class="toolbar toolbar-bottom">
     <button id="btn-help" class="btn-help" title="How to use PkViz2">Help</button>
-    <div class="toolbar-section transport">
-      <input type="file" id="file-input" accept=".pcap,.pcapng,.cap">
-      <button id="btn-load" class="btn-accent" title="Load .pcap file">Load</button>
+
+    <div class="divider"></div>
+
+    <input type="file" id="file-input" accept=".pcap,.pcapng,.cap">
+    <div class="toolbar-section">
+      <button id="btn-load" title="Load .pcap file">Load</button>
       <button id="btn-load-sample" title="Load sample.pcap">Load Sample</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="toolbar-section">
+      <button id="btn-play" class="btn-play" title="Play animation">Play</button>
+      <button id="btn-stop" class="btn-stop" title="Stop animation">Stop</button>
       <button id="btn-reset" title="Reset to start">Reset</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="toolbar-section">
       <button id="btn-step-back" title="Step back one packet">&laquo; Step</button>
-      <button id="btn-play" class="btn-primary" title="Play animation">Play</button>
-      <button id="btn-pause" title="Pause animation">Pause</button>
       <button id="btn-step-fwd" title="Step forward one packet">Step &raquo;</button>
     </div>
 
@@ -140,7 +152,7 @@
         <tr><td><strong>Load Sample</strong></td><td>Load the included sample.pcap</td></tr>
         <tr><td><strong>Reset</strong></td><td>Jump to first packet</td></tr>
         <tr><td><strong>&laquo; Step / Step &raquo;</strong></td><td>Step one packet back/forward</td></tr>
-        <tr><td><strong>Play / Pause</strong></td><td>Start/stop animation</td></tr>
+        <tr><td><strong>Play / Stop</strong></td><td>Start/stop animation</td></tr>
         <tr><td><strong>Go to #</strong></td><td>Jump to a specific packet number</td></tr>
         <tr><td><strong>Hex Dump</strong></td><td>Toggle raw hex view of current packet</td></tr>
       </table>
@@ -151,8 +163,8 @@
         <tr><td><strong>Speed</strong></td><td>Packets per second (default: 10)</td></tr>
         <tr><td><strong>Max Bytes</strong></td><td>X axis maximum (default: 1500)</td></tr>
         <tr><td><strong>X Scale</strong></td><td>Linear or Logarithmic (spreads early bytes)</td></tr>
-        <tr><td><strong>Invert Y</strong></td><td>Flip Y axis (0 at top)</td></tr>
-        <tr><td><strong>BG / Cold / Hot</strong></td><td>Background, low-density, and high-density colors</td></tr>
+        <tr><td><strong>Fill Width</strong></td><td>Dots fill their full X span (useful with Log scale)</td></tr>
+        <tr><td><strong>Cold / Hot</strong></td><td>Low-density and high-density colors</td></tr>
         <tr><td><strong>Fade Min / Max</strong></td><td>Brightness range for oldest/newest packets</td></tr>
       </table>
 

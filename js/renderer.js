@@ -53,8 +53,7 @@ function mapX(bytePos, state) {
   return Math.min(bytePos, canvasWidth - 1);
 }
 
-function mapY(byteValue, state) {
-  if (state.yInverted) return byteValue;
+function mapY(byteValue) {
   return 255 - byteValue;
 }
 
@@ -95,20 +94,26 @@ export function render() {
   const windowStart = Math.max(0, windowEnd - state.windowSize + 1);
   const activeWindowSize = windowEnd - windowStart + 1;
 
-  // Pass 1: compute density at each pixel (dots fill their full x-span)
+  const fillWidth = state.fillWidth;
+
+  // Pass 1: compute density at each pixel
   densityBuffer.fill(0);
   for (let wi = 0; wi < activeWindowSize; wi++) {
     const packet = state.packets[windowStart + wi];
     const len = Math.min(packet.length, state.maxPacketSize);
     for (let b = 0; b < len; b++) {
       const x = mapX(b, state);
-      const xEnd = (b + 1 < state.maxPacketSize) ? mapX(b + 1, state) : canvasWidth;
-      const dotW = Math.max(1, xEnd - x);
-      const y = mapY(packet[b], state);
-      for (let dx = 0; dx < dotW; dx++) {
-        if (x + dx < canvasWidth) {
-          densityBuffer[y * canvasWidth + x + dx]++;
+      const y = mapY(packet[b]);
+      if (fillWidth) {
+        const xEnd = (b + 1 < state.maxPacketSize) ? mapX(b + 1, state) : canvasWidth;
+        const dotW = Math.max(1, xEnd - x);
+        for (let dx = 0; dx < dotW; dx++) {
+          if (x + dx < canvasWidth) {
+            densityBuffer[y * canvasWidth + x + dx]++;
+          }
         }
+      } else {
+        densityBuffer[y * canvasWidth + x]++;
       }
     }
   }
@@ -119,7 +124,7 @@ export function render() {
     if (densityBuffer[i] > maxDensity) maxDensity = densityBuffer[i];
   }
 
-  const bgRgb = hexToRgb(state.backgroundColor);
+  const bgRgb = [0, 0, 0];
   const coldRgb = hexToRgb(state.coldColor);
   const hotRgb = hexToRgb(state.hotColor);
   const data = imageData.data;
@@ -147,9 +152,7 @@ export function render() {
 
     for (let b = 0; b < len; b++) {
       const x = mapX(b, state);
-      const xEnd = (b + 1 < state.maxPacketSize) ? mapX(b + 1, state) : canvasWidth;
-      const dotW = Math.max(1, xEnd - x);
-      const y = mapY(packet[b], state);
+      const y = mapY(packet[b]);
 
       const density = densityBuffer[y * canvasWidth + x];
       const densityT = maxDensity > 1 ? Math.sqrt((density - 1) / (maxDensity - 1)) : 0;
@@ -159,10 +162,19 @@ export function render() {
       const g = Math.round(bgRgb[1] + (base[1] - bgRgb[1]) * brightness);
       const bv = Math.round(bgRgb[2] + (base[2] - bgRgb[2]) * brightness);
 
-      for (let dx = 0; dx < dotW; dx++) {
-        const px = x + dx;
-        if (px >= canvasWidth) break;
-        const pi = (y * canvasWidth + px) * 4;
+      if (fillWidth) {
+        const xEnd = (b + 1 < state.maxPacketSize) ? mapX(b + 1, state) : canvasWidth;
+        const dotW = Math.max(1, xEnd - x);
+        for (let dx = 0; dx < dotW; dx++) {
+          const px = x + dx;
+          if (px >= canvasWidth) break;
+          const pi = (y * canvasWidth + px) * 4;
+          data[pi]     = r;
+          data[pi + 1] = g;
+          data[pi + 2] = bv;
+        }
+      } else {
+        const pi = (y * canvasWidth + x) * 4;
         data[pi]     = r;
         data[pi + 1] = g;
         data[pi + 2] = bv;

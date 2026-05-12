@@ -9,9 +9,8 @@ const state = {
   speed: 10,
   maxPacketSize: 1500,
   xAxisMode: 'linear',
-  yInverted: false,
+  fillWidth: false,
 
-  backgroundColor: '#000000',
   coldColor: '#0000ff',
   hotColor: '#ffff00',
   brightnessMin: 0.1,
