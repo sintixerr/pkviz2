@@ -13,43 +13,42 @@
   <div class="toolbar toolbar-top">
     <div class="brand">
       <h1>PkViz<span class="brand-accent">2</span></h1>
-      <a href="#" id="help-link" class="help-link" title="How to use PkViz2">?</a>
     </div>
 
     <div class="divider"></div>
 
     <div class="toolbar-section">
       <span class="section-label">Capture</span>
-      <label>Window <input type="number" id="input-window-size" value="100" min="1" max="100000"></label>
-      <label>Speed <input type="number" id="input-speed" value="10" min="0.1" max="10000" step="1"></label>
-      <label>Max Bytes <input type="number" id="input-max-packet-size" value="1500" min="1" max="65535"></label>
+      <label title="Number of packets visible at once (1–100000)">Window <input type="number" id="input-window-size" value="100" min="1" max="100000"></label>
+      <label title="Packets advanced per second during playback">Speed <input type="number" id="input-speed" value="10" min="0.1" max="10000" step="1"></label>
+      <label title="X axis maximum byte position (1–1500)">Max Bytes <input type="number" id="input-max-packet-size" value="1500" min="1" max="1500"></label>
     </div>
 
     <div class="divider"></div>
 
     <div class="toolbar-section">
       <span class="section-label">Axes</span>
-      <label>X Scale <select id="input-x-mode">
+      <label title="Linear maps byte positions 1:1; Log spreads early bytes for header detail">X Scale <select id="input-x-mode">
         <option value="linear">Linear</option>
         <option value="logarithmic">Log</option>
       </select></label>
-      <label class="checkbox-label"><input type="checkbox" id="input-fill-width"> Fill Width</label>
+      <label class="checkbox-label" title="Dots fill their full X span instead of 1px (most visible with Log scale)"><input type="checkbox" id="input-fill-width"> Fill Width</label>
     </div>
 
     <div class="divider"></div>
 
     <div class="toolbar-section">
       <span class="section-label">Palette</span>
-      <label>Cold <input type="color" id="input-cold-color" value="#0000ff"></label>
-      <label>Hot <input type="color" id="input-hot-color" value="#ffff00"></label>
+      <label title="Color for low-density pixels (few overlapping packets)">Cold <input type="color" id="input-cold-color" value="#0000ff"></label>
+      <label title="Color for high-density pixels (many overlapping packets)">Hot <input type="color" id="input-hot-color" value="#ffff00"></label>
     </div>
 
     <div class="divider"></div>
 
     <div class="toolbar-section">
       <span class="section-label">Fade</span>
-      <label>Min <input type="number" id="input-brightness-min" value="0.1" min="0" max="1" step="0.05"></label>
-      <label>Max <input type="number" id="input-brightness-max" value="1.0" min="0" max="1" step="0.05"></label>
+      <label title="Brightness of the oldest packet in the window (0–10)">Min <input type="number" id="input-brightness-min" value="0.1" min="0" max="10" step="0.05"></label>
+      <label title="Brightness of the newest packet in the window (0–10)">Max <input type="number" id="input-brightness-max" value="1.0" min="0" max="10" step="0.05"></label>
     </div>
 
   </div>
@@ -64,7 +63,7 @@
   </div>
 
   <div class="scrubber-bar">
-    <input type="range" id="input-scrubber" min="0" max="0" value="0" disabled>
+    <input type="range" id="input-scrubber" min="0" max="0" value="0" disabled title="Scrub through packets">
   </div>
 
   <div class="toolbar toolbar-bottom">
@@ -96,8 +95,8 @@
     <div class="divider"></div>
 
     <div class="toolbar-section nav">
-      <label>Go to<input type="number" id="input-goto-packet" min="1" placeholder="#"></label>
-      <button id="btn-goto">Go</button>
+      <label title="Jump to a specific packet number">Go to<input type="number" id="input-goto-packet" min="1" placeholder="#"></label>
+      <button id="btn-goto" title="Jump to the entered packet number">Go</button>
     </div>
 
     <div class="divider"></div>

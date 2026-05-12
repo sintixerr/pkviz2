@@ -393,28 +393,6 @@ body {
   white-space: pre;
 }
 
-/* Help link */
-
-.help-link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.4rem;
-  height: 1.4rem;
-  border-radius: 50%;
-  background: var(--border);
-  color: var(--text-dim);
-  font-size: 0.85rem;
-  font-weight: 700;
-  text-decoration: none;
-  transition: background 0.15s, color 0.15s;
-}
-
-.help-link:hover {
-  background: var(--accent);
-  color: var(--bg-deep);
-}
-
 /* Help modal */
 
 .help-modal {

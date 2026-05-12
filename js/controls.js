@@ -82,10 +82,6 @@ export function initControls() {
   });
 
   const helpModal = document.getElementById('help-modal');
-  document.getElementById('help-link').addEventListener('click', (e) => {
-    e.preventDefault();
-    helpModal.classList.toggle('hidden');
-  });
   document.getElementById('btn-help').addEventListener('click', () => {
     helpModal.classList.toggle('hidden');
   });
@@ -110,9 +106,9 @@ export function initControls() {
 
   bindSetting('input-window-size', 'windowSize', parseInt);
   bindSetting('input-speed', 'speed', parseFloat);
-  bindSetting('input-max-packet-size', 'maxPacketSize', parseInt);
-  bindSetting('input-brightness-min', 'brightnessMin', parseFloat);
-  bindSetting('input-brightness-max', 'brightnessMax', parseFloat);
+  bindSetting('input-max-packet-size', 'maxPacketSize', parseInt, 1500);
+  bindSetting('input-brightness-min', 'brightnessMin', parseFloat, 10);
+  bindSetting('input-brightness-max', 'brightnessMax', parseFloat, 10);
 
   bindColorSetting('input-cold-color', 'coldColor');
   bindColorSetting('input-hot-color', 'hotColor');
@@ -162,15 +158,19 @@ function loadPcapBuffer(arrayBuffer) {
   render();
 }
 
-function bindSetting(inputId, stateKey, parser) {
+function bindSetting(inputId, stateKey, parser, max) {
   const input = document.getElementById(inputId);
+  const min = parseFloat(input.min) || 0;
   input.addEventListener('change', (e) => {
-    const val = parser(e.target.value);
-    if (!isNaN(val) && val > 0) {
-      setState({ [stateKey]: val });
-      if (stateKey === 'maxPacketSize') resizeCanvas();
-      render();
+    let val = parser(e.target.value);
+    if (isNaN(val) || val < min) return;
+    if (max !== undefined && val > max) {
+      val = max;
+      input.value = val;
     }
+    setState({ [stateKey]: val });
+    if (stateKey === 'maxPacketSize') resizeCanvas();
+    render();
   });
 }
 
