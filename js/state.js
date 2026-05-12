@@ -16,7 +16,6 @@ const state = {
   hotColor: '#ffff00',
   brightnessMin: 0.1,
   brightnessMax: 1.0,
-  coolFx: false,
 };
 
 const listeners = new Map();

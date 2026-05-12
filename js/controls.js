@@ -123,10 +123,6 @@ export function initControls() {
     render();
   });
 
-  document.getElementById('input-cool-fx').addEventListener('change', (e) => {
-    setState({ coolFx: e.target.checked });
-    render();
-  });
 
   document.getElementById('input-x-mode').addEventListener('change', (e) => {
     setState({ xAxisMode: e.target.value });
