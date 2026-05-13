@@ -67,3 +67,12 @@ sudo tcpdump -i en0 -s 0 -c 1000 -w capture.pcap
 ## Deployment
 
 Static site — deploy to Render, Netlify, GitHub Pages, etc. with no build command. Publish directory is the repo root. Ensure `sample.pcap` is included if the "Load Sample" feature should work.
+
+## Revert notes
+
+### Coordinate tooltip (added commit after dce6a93)
+Hover tooltip showing byte position and value on the scatterplot. To revert:
+- `index.html`: remove `<div id="coord-tooltip" ...>` from `.canvas-container`
+- `style.css`: remove `.coord-tooltip` and `.coord-tooltip.hidden` rules
+- `js/renderer.js`: remove `displayToCoords()` export
+- `js/controls.js`: remove `displayToCoords` import, remove `coordTooltip`/`glowCanvas` mousemove/mouseleave block

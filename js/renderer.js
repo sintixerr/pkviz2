@@ -57,6 +57,27 @@ function mapY(byteValue) {
   return 255 - byteValue;
 }
 
+export function displayToCoords(displayX, displayY) {
+  const state = getState();
+  const cssW = parseFloat(canvas.style.width);
+  const cssH = parseFloat(canvas.style.height);
+  const pixelX = Math.floor((displayX / cssW) * canvasWidth);
+  const pixelY = Math.floor((displayY / cssH) * canvasHeight);
+
+  if (pixelX < 0 || pixelX >= canvasWidth || pixelY < 0 || pixelY >= canvasHeight) return null;
+
+  let bytePos;
+  if (state.xAxisMode === 'logarithmic') {
+    const logMax = Math.log(state.maxPacketSize + 1);
+    bytePos = Math.round(Math.exp((pixelX / (canvasWidth - 1)) * logMax) - 1);
+  } else {
+    bytePos = pixelX;
+  }
+
+  const byteValue = 255 - pixelY;
+  return { bytePos, byteValue };
+}
+
 function drawGrid(data, bgRgb, state) {
   const gridR = Math.min(bgRgb[0] + 18, 255);
   const gridG = Math.min(bgRgb[1] + 18, 255);

@@ -56,6 +56,7 @@
   <div class="canvas-container">
     <canvas id="packet-canvas"></canvas>
     <canvas id="glow-canvas"></canvas>
+    <div id="coord-tooltip" class="coord-tooltip hidden"></div>
   </div>
 
   <div id="hexdump-panel" class="hexdump-panel hidden">
@@ -126,60 +127,96 @@
   <div id="help-modal" class="help-modal hidden">
     <div class="help-content">
       <button id="help-close" class="help-close">&times;</button>
-      <h2>PkViz2 — Quick Start Guide</h2>
+      <h2>PkViz2 — Help</h2>
 
-      <h3>What It Does</h3>
-      <p>PkViz2 visualizes network packet data as a scatterplot. Each byte in a packet becomes a dot:</p>
+      <h3>Overview</h3>
+      <p>PkViz2 visualizes network packet capture files (.pcap / .pcapng) as an animated scatterplot. Every byte in every packet becomes a dot on the canvas:</p>
       <ul>
-        <li><strong>X axis</strong> = byte's position within the packet (0 to Max Bytes, default 1500)</li>
-        <li><strong>Y axis</strong> = byte's value (0 at bottom, 255 at top)</li>
+        <li><strong>X axis</strong> = the byte's position within its packet (0 on the left, up to 1500 on the right)</li>
+        <li><strong>Y axis</strong> = the byte's value (0 at the bottom, 255 at the top)</li>
       </ul>
+      <p>Multiple packets are displayed simultaneously in a sliding window. As animation plays, new packets enter the window and old packets drop out, creating a moving view through the capture.</p>
 
-      <h3>How the Visualization Works</h3>
-      <h4>Packet Window</h4>
-      <p>The display shows multiple packets simultaneously. The <strong>Window</strong> setting controls how many (default: 100). As animation plays, packets slide through: newest enters, oldest drops out.</p>
-
+      <h3>How Color and Brightness Work</h3>
       <h4>Color = Density</h4>
-      <p>When multiple packets share the same position AND value, that pixel shifts from <strong>cold</strong> (blue) toward <strong>hot</strong> (yellow). More overlap = warmer color.</p>
+      <p>Each pixel on the canvas tracks how many packets in the current window have a byte with the same position and same value. When only one packet occupies a pixel, it renders in the <strong>cold</strong> color (default: blue). As more packets overlap at the same pixel, the color shifts toward the <strong>hot</strong> color (default: yellow). The scaling is automatic &mdash; it adjusts to the densest pixel in each frame, so the full color range is always used.</p>
 
       <h4>Brightness = Recency</h4>
-      <p>Each packet gets brightness based on age within the window. Newest = full bright, oldest = nearly invisible.</p>
+      <p>Every dot from a single packet shares the same brightness level, determined by the packet's age within the window. The newest packet renders at <strong>Fade Max</strong> brightness (default: 1.0). The oldest packet renders at <strong>Fade Min</strong> brightness (default: 0.1), making it nearly invisible against the black background. Packets in between follow a quadratic fade curve, so dots fade quickly at first then hold faintly. Since packets are drawn oldest-to-newest, newer dots always overwrite older ones at shared pixels.</p>
 
-      <h3>Transport Controls (Bottom Bar)</h3>
+      <h4>Glow Effect</h4>
+      <p>A second canvas layer duplicates the image with a soft blur and reduced opacity, giving bright areas a subtle glow or bloom effect. This is purely cosmetic and always active.</p>
+
+      <h3>Loading Data</h3>
       <table>
-        <tr><td><strong>Load</strong></td><td>Open a .pcap/.pcapng file</td></tr>
-        <tr><td><strong>Load Sample</strong></td><td>Load the included sample.pcap</td></tr>
-        <tr><td><strong>Reset</strong></td><td>Jump to first packet</td></tr>
-        <tr><td><strong>&laquo; Step / Step &raquo;</strong></td><td>Step one packet back/forward</td></tr>
-        <tr><td><strong>Play / Stop</strong></td><td>Start/stop animation</td></tr>
-        <tr><td><strong>Go to #</strong></td><td>Jump to a specific packet number</td></tr>
-        <tr><td><strong>Hex Dump</strong></td><td>Toggle raw hex view of current packet</td></tr>
+        <tr><td><strong>Load</strong></td><td>Opens a file picker to select a .pcap, .pcapng, or .cap file from your computer. The file is parsed entirely in the browser &mdash; nothing is uploaded to a server. Both classic pcap (big/little endian, microsecond/nanosecond) and pcapng formats are supported.</td></tr>
+        <tr><td><strong>Load Sample</strong></td><td>Fetches and loads a sample.pcap file bundled with the application, useful for trying things out without your own capture data.</td></tr>
       </table>
 
-      <h3>Settings (Top Bar)</h3>
+      <h3>Playback Controls</h3>
       <table>
-        <tr><td><strong>Window</strong></td><td>Packets displayed at once (default: 100)</td></tr>
-        <tr><td><strong>Speed</strong></td><td>Packets per second (default: 10)</td></tr>
-        <tr><td><strong>Max Bytes</strong></td><td>X axis maximum (default: 1500)</td></tr>
-        <tr><td><strong>X Scale</strong></td><td>Linear or Logarithmic (spreads early bytes)</td></tr>
-        <tr><td><strong>Fill Width</strong></td><td>Dots fill their full X span (useful with Log scale)</td></tr>
-        <tr><td><strong>Cold / Hot</strong></td><td>Low-density and high-density colors</td></tr>
-        <tr><td><strong>Fade Min / Max</strong></td><td>Brightness range for oldest/newest packets</td></tr>
+        <tr><td><strong>Play</strong></td><td>Begin advancing through packets automatically at the configured <strong>Speed</strong>. If the animation has reached the end of the capture, pressing Play restarts from the beginning.</td></tr>
+        <tr><td><strong>Stop</strong></td><td>Halt the animation at the current position. The display freezes in place so you can examine the current window.</td></tr>
+        <tr><td><strong>Reset</strong></td><td>Stop playback and jump back to the very first packet in the capture.</td></tr>
+        <tr><td><strong>&laquo; Step</strong></td><td>Stop playback and move backward by exactly one packet. The oldest packet in the window re-enters and the newest drops out.</td></tr>
+        <tr><td><strong>Step &raquo;</strong></td><td>Stop playback and move forward by exactly one packet. A new packet enters the window and the oldest drops out.</td></tr>
+        <tr><td><strong>Scrubber</strong></td><td>The full-width slider between the canvas and the bottom toolbar. Drag it to quickly jump to any position in the capture. Stops playback when used.</td></tr>
+        <tr><td><strong>Go to</strong></td><td>Type a packet number and click Go (or press Enter) to jump directly to that packet. The display centers the window ending at that packet number.</td></tr>
+      </table>
+
+      <h3>Inspection</h3>
+      <table>
+        <tr><td><strong>Hex Dump</strong></td><td>Toggles a panel below the canvas showing the raw hex and ASCII contents of the current (newest) packet in the window. The display updates automatically as you step or scrub through packets. Format: offset on the left, hex bytes in the center (split into two groups of 8), printable ASCII on the right.</td></tr>
+      </table>
+
+      <h3>Status Readout</h3>
+      <table>
+        <tr><td><strong>PKT</strong></td><td>The number of the newest (most recent) packet currently visible in the window.</td></tr>
+        <tr><td><strong>WINDOW</strong></td><td>The range of packet numbers currently displayed, e.g. "51-150" means packets 51 through 150 are on screen.</td></tr>
+        <tr><td><strong>TOTAL</strong></td><td>The total number of packets in the loaded capture file.</td></tr>
+      </table>
+
+      <h3>Capture Settings</h3>
+      <table>
+        <tr><td><strong>Window</strong></td><td>How many packets are visible at once (default: 100). A small window (5&ndash;10) lets you see individual packet structures and watch the fade effect. A large window (500+) reveals aggregate patterns and density hot spots across many packets. Range: 1&ndash;100,000.</td></tr>
+        <tr><td><strong>Speed</strong></td><td>How many packets advance per second during playback (default: 10). Low speeds let you watch packets arrive one by one. High speeds (100+) create a fast-flowing animation. Range: 0.1&ndash;10,000.</td></tr>
+        <tr><td><strong>Max Bytes</strong></td><td>The maximum byte position shown on the X axis (default: 1500). This sets the right edge of the canvas. Bytes beyond this position in a packet are not displayed. Standard Ethernet MTU is 1500 bytes. Lowering this value zooms into the early bytes of each packet. Range: 1&ndash;1500.</td></tr>
+      </table>
+
+      <h3>Axes Settings</h3>
+      <table>
+        <tr><td><strong>X Scale</strong></td><td><strong>Linear</strong> (default): byte position maps directly to pixel position &mdash; each byte gets equal horizontal space. <strong>Log</strong>: applies a logarithmic mapping so early byte positions (headers, protocol fields) are spread across more horizontal space while later positions (payload) are compressed. This is especially useful for examining packet header structure, where the most meaningful bytes are in the first 20&ndash;60 positions.</td></tr>
+        <tr><td><strong>Fill Width</strong></td><td>When unchecked (default), each byte renders as a single pixel dot. When checked, each byte fills its full horizontal span from its mapped position to the next byte's position. In Linear mode the difference is negligible (each byte already occupies ~1 pixel). In Log mode the effect is dramatic &mdash; early bytes that are spread across many pixels render as wide bars instead of isolated dots with gaps between them.</td></tr>
+      </table>
+
+      <h3>Palette Settings</h3>
+      <table>
+        <tr><td><strong>Cold</strong></td><td>The color used for low-density pixels, where only one or very few packets share the same byte position and value (default: blue). Click to open a color picker.</td></tr>
+        <tr><td><strong>Hot</strong></td><td>The color used for high-density pixels, where many packets overlap at the same position and value (default: yellow). The color gradient between cold and hot is computed using a square-root scale, giving more visual range to low-density areas. Click to open a color picker.</td></tr>
+      </table>
+
+      <h3>Fade Settings</h3>
+      <table>
+        <tr><td><strong>Min</strong></td><td>Brightness of the oldest packet in the window (default: 0.1). At 0 the oldest packet is completely invisible. Higher values keep old packets more visible. Range: 0&ndash;10. Values above 1 create an overbright effect.</td></tr>
+        <tr><td><strong>Max</strong></td><td>Brightness of the newest packet in the window (default: 1.0). At 1.0 the newest packet renders at full color intensity. Values above 1 push colors toward white for an overbright/bloom look. Range: 0&ndash;10.</td></tr>
       </table>
 
       <h3>Keyboard Shortcuts</h3>
       <table>
-        <tr><td><strong>Space</strong></td><td>Play / Pause</td></tr>
-        <tr><td><strong>Left Arrow</strong></td><td>Step back</td></tr>
-        <tr><td><strong>Right Arrow</strong></td><td>Step forward</td></tr>
+        <tr><td><strong>Space</strong></td><td>Toggle Play / Stop. Disabled when a text input or dropdown is focused.</td></tr>
+        <tr><td><strong>Left Arrow</strong></td><td>Step back one packet. Stops playback if running. Disabled when an input is focused.</td></tr>
+        <tr><td><strong>Right Arrow</strong></td><td>Step forward one packet. Stops playback if running. Disabled when an input is focused.</td></tr>
       </table>
 
       <h3>Tips</h3>
       <ul>
-        <li>Small window (5-10) to see individual packet structure and fade</li>
-        <li>Large window (500+) to see aggregate patterns and density</li>
-        <li>Logarithmic X is great for protocol header patterns</li>
-        <li>DNS traffic (port 53) makes great demo data</li>
+        <li>Protocol headers create tight horizontal bands at consistent byte values and positions &mdash; these are the fixed fields (version, flags, lengths) that every packet shares.</li>
+        <li>Encrypted payloads (TLS, SSH) appear as uniform random noise filling the canvas &mdash; a sign that the encryption is working properly.</li>
+        <li>DNS traffic (port 53) makes great demo data: queries are short, responses are variable, and the protocol structure is clearly visible.</li>
+        <li>Try Log X scale with Fill Width enabled to get the best view of header structures.</li>
+        <li>Set Fade Max above 1.0 for an overbright glow on the newest packet.</li>
+        <li>Use the scrubber bar to quickly scan through a large capture, then step through interesting sections one packet at a time.</li>
+        <li>To generate a capture file: <code>sudo tcpdump -i en0 -s 0 -c 1000 -w capture.pcap</code></li>
       </ul>
     </div>
   </div>

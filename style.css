@@ -358,6 +358,24 @@ body {
   image-rendering: pixelated;
 }
 
+.coord-tooltip {
+  position: absolute;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid var(--border-light);
+  border-radius: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--accent);
+  white-space: nowrap;
+  z-index: 20;
+}
+
+.coord-tooltip.hidden {
+  display: none;
+}
+
 #glow-canvas {
   position: absolute;
   top: 0;

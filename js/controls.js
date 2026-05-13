@@ -1,6 +1,6 @@
 import { getState, setState, subscribe } from './state.js';
 import { parseFile } from './pcap-parser.js';
-import { render, resizeCanvas } from './renderer.js';
+import { render, resizeCanvas, displayToCoords } from './renderer.js';
 import { startAnimation, stopAnimation, stepForward, stepBack } from './animator.js';
 
 export function initControls() {
@@ -90,6 +90,29 @@ export function initControls() {
   });
   helpModal.addEventListener('click', (e) => {
     if (e.target === helpModal) helpModal.classList.add('hidden');
+  });
+
+  const coordTooltip = document.getElementById('coord-tooltip');
+  const glowCanvas = document.getElementById('glow-canvas');
+  glowCanvas.addEventListener('mousemove', (e) => {
+    const rect = glowCanvas.getBoundingClientRect();
+    const container = glowCanvas.parentElement;
+    const x = e.clientX - rect.left + container.scrollLeft;
+    const y = e.clientY - rect.top + container.scrollTop;
+    const coords = displayToCoords(x, y);
+    if (!coords || !getState().fileLoaded) {
+      coordTooltip.classList.add('hidden');
+      return;
+    }
+    coordTooltip.textContent = `Pos: ${coords.bytePos}  Val: ${coords.byteValue} (0x${coords.byteValue.toString(16).padStart(2, '0')})`;
+    coordTooltip.classList.remove('hidden');
+    const tipX = e.clientX - container.getBoundingClientRect().left + container.scrollLeft + 12;
+    const tipY = e.clientY - container.getBoundingClientRect().top + container.scrollTop - 8;
+    coordTooltip.style.left = tipX + 'px';
+    coordTooltip.style.top = tipY + 'px';
+  });
+  glowCanvas.addEventListener('mouseleave', () => {
+    coordTooltip.classList.add('hidden');
   });
 
   const scrubber = document.getElementById('input-scrubber');
