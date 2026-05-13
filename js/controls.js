@@ -93,10 +93,10 @@ export function initControls() {
   });
 
   const coordTooltip = document.getElementById('coord-tooltip');
-  const glowCanvas = document.getElementById('glow-canvas');
-  glowCanvas.addEventListener('mousemove', (e) => {
-    const rect = glowCanvas.getBoundingClientRect();
-    const container = glowCanvas.parentElement;
+  const packetCanvas = document.getElementById('packet-canvas');
+  packetCanvas.addEventListener('mousemove', (e) => {
+    const rect = packetCanvas.getBoundingClientRect();
+    const container = packetCanvas.parentElement;
     const x = e.clientX - rect.left + container.scrollLeft;
     const y = e.clientY - rect.top + container.scrollTop;
     const coords = displayToCoords(x, y);
@@ -111,7 +111,7 @@ export function initControls() {
     coordTooltip.style.left = tipX + 'px';
     coordTooltip.style.top = tipY + 'px';
   });
-  glowCanvas.addEventListener('mouseleave', () => {
+  packetCanvas.addEventListener('mouseleave', () => {
     coordTooltip.classList.add('hidden');
   });
 
